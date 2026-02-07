@@ -17,13 +17,13 @@ model Scholarship {
   id              String    @id @default(cuid())
   slug            String    @unique
   createdAt       DateTime  @default(now())
-  updatedAT       DateTime  @updatedAt
+  updatedAt       DateTime  @updatedAt
   title           String
   description     String    @db.Text
   providerName    String
   amount          Float
   currency        String
-  fieldOfStduy    String[]
+  fieldOfStudy    String[]
   degreeLevel     String
   targetCountry   String
   eligibleRegions String[]

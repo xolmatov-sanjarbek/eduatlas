@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import {
   Search,
   Filter,
@@ -18,6 +19,7 @@ import { Button } from "@/components/ui/button";
 
 interface Scholarship {
   id: string;
+  slug: string;
   title: string;
   providerName: string;
   targetCountry: string;
@@ -28,7 +30,7 @@ interface Scholarship {
   degreeLevel: string;
   isFeatured: boolean;
   views: number;
-  updatedAT: Date;
+  updatedAt: Date;
 }
 
 interface ScholarshipsClientProps {
@@ -38,6 +40,7 @@ interface ScholarshipsClientProps {
 export default function ScholarshipsClient({
   scholarships,
 }: ScholarshipsClientProps) {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
@@ -162,7 +165,7 @@ export default function ScholarshipsClient({
       switch (sortBy) {
         case "recent":
           return (
-            new Date(b.updatedAT).getTime() - new Date(a.updatedAT).getTime()
+            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
           );
         case "deadline-soon":
           if (!a.deadline) return 1;
@@ -195,45 +198,42 @@ export default function ScholarshipsClient({
 
   return (
     <div className="min-h-screen bg-linear-to-b from-emerald-50 to-white pt-20">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            Browse{" "}
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-600 to-emerald-400">
-              Scholarships
-            </span>
-          </h1>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+        <h1 className="text-3xl font-bold text-gray-900 mb-6">
+          Browse{" "}
+          <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-600 to-emerald-400">
+            Scholarships
+          </span>
+        </h1>
 
-          {/* Search and Filter Bar */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            {/* Search Input */}
-            <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search scholarships, universities, countries..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
-              />
-            </div>
-
-            {/* Filter Button */}
-            <Button
-              onClick={() => setShowFilters(!showFilters)}
-              variant="outline"
-              className="border-2 border-gray-300 hover:border-emerald-500 hover:bg-emerald-50 px-6 py-3 rounded-xl font-semibold flex items-center gap-2 relative"
-            >
-              <Filter className="w-5 h-5" />
-              Filters
-              {activeFiltersCount > 0 && (
-                <span className="absolute -top-2 -right-2 w-6 h-6 bg-emerald-600 text-white text-xs font-bold rounded-full flex items-center justify-center">
-                  {activeFiltersCount}
-                </span>
-              )}
-            </Button>
+        {/* Search and Filter Bar */}
+        <div className="flex flex-col sm:flex-row gap-4 mb-8">
+          {/* Search Input */}
+          <div className="flex-1 relative">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search scholarships, universities, countries..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+            />
           </div>
+
+          {/* Filter Button */}
+          <Button
+            onClick={() => setShowFilters(!showFilters)}
+            variant="outline"
+            className="border-2 border-gray-300 hover:border-emerald-500 hover:bg-emerald-50 px-6 py-3 rounded-xl font-semibold flex items-center gap-2 relative"
+          >
+            <Filter className="w-5 h-5" />
+            Filters
+            {activeFiltersCount > 0 && (
+              <span className="absolute -top-2 -right-2 w-6 h-6 bg-emerald-600 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                {activeFiltersCount}
+              </span>
+            )}
+          </Button>
         </div>
       </div>
 
@@ -484,9 +484,14 @@ export default function ScholarshipsClient({
                     <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
                       <div className="flex items-center gap-1.5 text-xs text-gray-500">
                         <Clock className="w-3.5 h-3.5" />
-                        Updated {formatDate(scholarship.updatedAT)}
+                        Updated {formatDate(scholarship.updatedAt)}
                       </div>
-                      <Button className="text-white bg-emerald-600 hover:text-emerald-900 hover:bg-emerald-500 font-semibold group/btn">
+                      <Button
+                        onClick={() =>
+                          router.push(`/scholarships/${scholarship.slug}`)
+                        }
+                        className="text-white bg-emerald-600 hover:text-emerald-900 hover:bg-emerald-500 font-semibold group/btn"
+                      >
                         Learn More
                         <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                       </Button>

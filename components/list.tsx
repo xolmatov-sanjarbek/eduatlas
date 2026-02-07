@@ -9,11 +9,12 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { Button } from "./ui/button";
+import Link from "next/link";
 
 const List = async () => {
   const scholarships = await prisma.scholarship.findMany({
     where: { isFeatured: true },
-    orderBy: { updatedAT: "desc" },
+    orderBy: { updatedAt: "desc" },
     take: 4,
   });
 
@@ -109,15 +110,18 @@ const List = async () => {
           <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
             <div className="flex items-center gap-1.5 text-xs text-gray-500">
               <Clock className="w-3.5 h-3.5" />
-              Updated {formatDate(scholarship.updatedAT)}
+              Updated {formatDate(scholarship.updatedAt)}
             </div>
             <Button
+              asChild
               variant="ghost"
               size="sm"
               className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 font-semibold group/btn"
             >
-              View Details
-              <ArrowRight className="w-4 h-4 ml-1 group-hover/btn:translate-x-1 transition-transform" />
+              <Link href={`scholarships/${scholarship.slug}`}>
+                View Details
+                <ArrowRight className="w-4 h-4 ml-1 group-hover/btn:translate-x-1 transition-transform" />
+              </Link>
             </Button>
           </div>
         </div>

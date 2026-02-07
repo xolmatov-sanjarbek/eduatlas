@@ -74,6 +74,7 @@ export default function AboutClient({ stats, values }: AboutClientProps) {
     <section
       ref={sectionRef}
       className="py-24 bg-linear-to-b from-white to-emerald-50 relative overflow-hidden"
+      id="#about"
     >
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

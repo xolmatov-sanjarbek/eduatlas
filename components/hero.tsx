@@ -10,6 +10,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function EduAtlasHero() {
   const [isVisible, setIsVisible] = useState(false);
@@ -88,11 +89,14 @@ export default function EduAtlasHero() {
             className={`flex flex-col sm:flex-row gap-4 justify-center items-center transition-all duration-700 delay-600 ${isVisible ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0"}`}
           >
             <Button
+              asChild
               size="lg"
               className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
             >
-              <Search className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
-              Start Searching
+              <Link href="/scholarships">
+                <Search className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
+                Start Searching
+              </Link>
             </Button>
             <Button
               size="lg"

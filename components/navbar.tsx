@@ -7,7 +7,6 @@ import {
   X,
   ChevronDown,
   ArrowRight,
-  Sparkles,
   GraduationCap,
   UniversityIcon,
 } from "lucide-react";
@@ -22,9 +21,9 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "#about" },
-  { name: "Scholarships", href: "#scholarships" },
+  { name: "Sponsors", href: "/sponsors" },
+  { name: "About", href: "/about" },
+  { name: "Scholarships", href: "/scholarships" },
 ];
 
 export default function Header1() {
@@ -95,7 +94,7 @@ export default function Header1() {
                 <GraduationCap className="h-5 w-5 text-white" />
               </div>
               <span className="bg-linear-to-r from-emerald-500 to-emerald-700 bg-clip-text text-xl font-bold text-transparent">
-                Acme Inc.
+                EduAtlas
               </span>
             </Link>
           </motion.div>
