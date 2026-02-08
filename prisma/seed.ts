@@ -245,13 +245,15 @@ async function seedScholarships() {
   ];
 
   try {
+    console.log(`Clearing existing scholarships...`);
+    await prisma.scholarship.deleteMany({});
+    
     console.log(`Seeding ${scholarships.length} scholarships...`);
     
-    for (const scholarship of scholarships) {
-      await prisma.scholarship.create({
-        data: scholarship,
-      });
-    }
+    await prisma.scholarship.createMany({
+      data: scholarships,
+      skipDuplicates: true,
+    });
 
     console.log(`Successfully seeded ${scholarships.length} scholarships!`);
   } catch (error) {

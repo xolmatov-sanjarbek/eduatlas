@@ -1,3 +1,20 @@
+model University {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  website      String?
+  image        String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  scholarships Scholarship[]
+  users        User[]
+}
+
+enum UserType {
+  STUDENT
+  UNIVERSITY
+}
+
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -14,12 +31,12 @@ datasource db {
 }
 
 model Scholarship {
-  id              String    @id @default(cuid())
-  slug            String    @unique
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id              String             @id @default(cuid())
+  slug            String             @unique
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
   title           String
-  description     String    @db.Text
+  description     String             @db.Text
   providerName    String
   amount          Float
   currency        String
@@ -29,6 +46,92 @@ model Scholarship {
   eligibleRegions String[]
   deadline        DateTime?
   officialWebsite String?
-  isFeatured      Boolean   @default(false)
+  isFeatured      Boolean            @default(false)
   views           Int
+  isEdited        Boolean            @default(false)
+  savedBy         SavedScholarship[]
+  universityId    String?
+  university      University?        @relation(fields: [universityId], references: [id], onDelete: SetNull)
+}
+
+model User {
+  id                String             @id
+  name              String
+  email             String
+  password          String? // Hashed password (optional for OAuth users)
+  emailVerified     Boolean            @default(false)
+  image             String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  sessions          Session[]
+  accounts          Account[]
+  savedScholarships SavedScholarship[]
+  userType          UserType           @default(STUDENT)
+  universityId      String?
+  university        University?        @relation(fields: [universityId], references: [id], onDelete: SetNull)
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model SavedScholarship {
+  id            String   @id @default(cuid())
+  userId        String
+  scholarshipId String
+  savedAt       DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scholarship Scholarship @relation(fields: [scholarshipId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, scholarshipId])
+  @@index([userId])
+  @@index([scholarshipId])
 }

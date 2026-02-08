@@ -8,9 +8,16 @@ export default async function ScholarshipDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const resolvedParams = await params;
-  const scholarship = await prisma.scholarship.findUnique({
-    where: { slug: resolvedParams.slug },
-  });
+  let scholarship: Awaited<
+    ReturnType<typeof prisma.scholarship.findUnique>
+  > = null;
+  try {
+    scholarship = await prisma.scholarship.findUnique({
+      where: { slug: resolvedParams.slug },
+    });
+  } catch (err) {
+    console.warn("Scholarship detail: could not load from database", err);
+  }
 
   if (!scholarship) {
     redirect("/scholarships");

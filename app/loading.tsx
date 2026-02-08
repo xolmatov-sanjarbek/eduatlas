@@ -4,7 +4,7 @@ import { GraduationCap } from "lucide-react";
 
 export default function Loader() {
   return (
-    <div className="fixed inset-0 bg-linear-to-br from-emerald-50 via-white to-emerald-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-gradient-to-br from-emerald-50 via-white to-emerald-50 flex items-center justify-center z-50">
       {/* Animated background blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>

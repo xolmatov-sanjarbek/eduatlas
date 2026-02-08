@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "@/lib/auth-client";
 import {
   ArrowLeft,
   MapPin,
@@ -20,6 +21,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import OptionalSignInCard from "@/components/optional-signin-card";
 
 interface Scholarship {
   id: string;
@@ -47,7 +49,86 @@ export default function ScholarshipDetailClient({
   scholarship,
 }: ScholarshipDetailClientProps) {
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isBookmarking, setIsBookmarking] = useState(false);
+  const [isCheckingBookmark, setIsCheckingBookmark] = useState(true);
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Check if scholarship is bookmarked
+  useEffect(() => {
+    if (!mounted) return;
+
+    const checkBookmark = async () => {
+      if (!session?.user) {
+        setIsCheckingBookmark(false);
+        return;
+      }
+
+      try {
+        const res = await fetch(
+          `/api/scholarships/${scholarship.id}/bookmark`,
+          { method: "GET" },
+        );
+        const data = await res.json();
+        setIsBookmarked(data.bookmarked || false);
+      } catch (error) {
+        console.error("Failed to check bookmark status:", error);
+      } finally {
+        setIsCheckingBookmark(false);
+      }
+    };
+
+    checkBookmark();
+  }, [mounted, session?.user, scholarship.id]);
+
+  // Track scholarship view
+  useEffect(() => {
+    if (!mounted) return;
+
+    const trackView = async () => {
+      try {
+        await fetch(`/api/scholarships/${scholarship.id}/view`, {
+          method: "POST",
+        });
+      } catch (error) {
+        // Silently fail - view tracking should not disrupt user experience
+        console.error("Failed to track view:", error);
+      }
+    };
+
+    trackView();
+  }, [mounted, scholarship.id]);
+
+  const handleBookmark = async () => {
+    if (!session?.user) {
+      router.push("/auth/signin");
+      return;
+    }
+
+    setIsBookmarking(true);
+    try {
+      const method = isBookmarked ? "DELETE" : "POST";
+      const res = await fetch(`/api/scholarships/${scholarship.id}/bookmark`, {
+        method,
+      });
+
+      if (res.ok) {
+        setIsBookmarked(!isBookmarked);
+      } else {
+        const errorData = await res.json();
+        console.error("Failed to update bookmark:", errorData.error);
+      }
+    } catch (error) {
+      console.error("Failed to update bookmark:", error);
+    } finally {
+      setIsBookmarking(false);
+    }
+  };
 
   const formatDate = (dateString: string | number | Date) => {
     const date = new Date(dateString);
@@ -79,7 +160,7 @@ export default function ScholarshipDetailClient({
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-emerald-50 to-white pt-20">
+    <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white pt-20">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Button */}
         <button
@@ -91,10 +172,12 @@ export default function ScholarshipDetailClient({
           <span className="sm:hidden">Back</span>
         </button>
 
+        <OptionalSignInCard />
+
         {/* Featured Badge */}
         {scholarship.isFeatured && (
           <div className="mb-6">
-            <div className="inline-flex items-center gap-2 bg-linear-to-r from-amber-400 to-orange-500 text-white px-4 py-2 rounded-full font-semibold shadow-lg">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-400 to-orange-500 text-white px-4 py-2 rounded-full font-semibold shadow-lg">
               <Star className="w-5 h-5 fill-white" />
               Featured Scholarship
             </div>
@@ -241,9 +324,8 @@ export default function ScholarshipDetailClient({
                     </div>
                     {daysLeft > 0 && (
                       <div
-                        className={`text-sm font-medium mt-1 ${
-                          daysLeft <= 30 ? "text-red-600" : "text-emerald-600"
-                        }`}
+                        className={`text-sm font-medium mt-1 ${daysLeft <= 30 ? "text-red-600" : "text-emerald-600"
+                          }`}
                       >
                         {daysLeft} days remaining
                       </div>
@@ -301,6 +383,26 @@ export default function ScholarshipDetailClient({
                 >
                   Apply Now
                   <ExternalLink className="w-5 h-5 ml-2" />
+                </Button>
+
+                <Button
+                  size="lg"
+                  disabled={isBookmarking || isCheckingBookmark}
+                  className={`w-full px-6 py-6 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 ${isBookmarked
+                    ? "bg-emerald-100 hover:bg-emerald-200 text-emerald-700"
+                    : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                    }`}
+                  onClick={handleBookmark}
+                >
+                  <Bookmark
+                    className={`w-5 h-5 mr-2 ${isBookmarked ? "fill-current" : ""
+                      }`}
+                  />
+                  {isBookmarking
+                    ? "Saving..."
+                    : isBookmarked
+                      ? "Bookmarked"
+                      : "Bookmark"}
                 </Button>
               </div>
 

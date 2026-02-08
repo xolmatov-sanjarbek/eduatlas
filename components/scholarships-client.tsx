@@ -38,7 +38,7 @@ export default function ScholarshipsClient({
   return (
     <section
       ref={sectionRef}
-      className="py-24 bg-linear-to-b from-emerald-50 to-white relative overflow-hidden"
+      className="py-24 bg-gradient-to-b from-white to-emerald-50 relative overflow-hidden"
     >
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -49,23 +49,21 @@ export default function ScholarshipsClient({
         {/* Section header */}
         <div className="text-center mb-16">
           <h2
-            className={`text-4xl sm:text-5xl font-bold text-gray-900 mb-4 transition-all duration-700 ${
-              isVisible
-                ? "translate-y-0 opacity-100"
-                : "-translate-y-4 opacity-0"
-            }`}
+            className={`text-4xl sm:text-5xl font-bold text-gray-900 mb-4 transition-all duration-700 ${isVisible
+              ? "translate-y-0 opacity-100"
+              : "-translate-y-4 opacity-0"
+              }`}
           >
             Featured{" "}
-            <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-600 to-emerald-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-400">
               Scholarships
             </span>
           </h2>
           <p
-            className={`text-xl text-gray-600 max-w-2xl mx-auto transition-all duration-700 delay-100 ${
-              isVisible
-                ? "translate-y-0 opacity-100"
-                : "-translate-y-4 opacity-0"
-            }`}
+            className={`text-xl text-gray-600 max-w-2xl mx-auto transition-all duration-700 delay-100 ${isVisible
+              ? "translate-y-0 opacity-100"
+              : "-translate-y-4 opacity-0"
+              }`}
           >
             Discover opportunities from top universities around the world
           </p>
@@ -73,18 +71,16 @@ export default function ScholarshipsClient({
 
         {/* Scholarships grid */}
         <div
-          className={`transition-all duration-700 delay-200 ${
-            isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-          }`}
+          className={`transition-all duration-700 delay-200 ${isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+            }`}
         >
           {children}
         </div>
 
         {/* View all button */}
         <div
-          className={`text-center transition-all duration-700 delay-800 ${
-            isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-          }`}
+          className={`text-center transition-all duration-700 delay-800 ${isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+            }`}
         >
           <Button
             size="lg"

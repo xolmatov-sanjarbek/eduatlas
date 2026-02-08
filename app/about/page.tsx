@@ -49,7 +49,7 @@ export default function AboutPage() {
     <div className="min-h-screen bg-white relative overflow-hidden">
       {/* Animated linear orb that follows mouse */}
       <div
-        className="fixed w-150 h-150 rounded-full bg-linear-to-r from-emerald-400/20 to-teal-400/20 blur-3xl pointer-events-none transition-all duration-1000 ease-out -z-10"
+        className="fixed w-150 h-150 rounded-full bg-gradient-to-r from-emerald-400/20 to-teal-400/20 blur-3xl pointer-events-none transition-all duration-1000 ease-out -z-10"
         style={{
           left: `${mousePosition.x - 300}px`,
           top: `${mousePosition.y - 300}px`,
@@ -67,15 +67,14 @@ export default function AboutPage() {
       <section className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 relative">
         <div className="max-w-5xl mx-auto">
           <div
-            className={`transition-all duration-1000 ${
-              isVisible
+            className={`transition-all duration-1000 ${isVisible
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-4"
-            }`}
+              }`}
           >
             {/* Decorative line */}
             <div className="flex items-center gap-4 mb-8">
-              <div className="h-1 w-20 bg-linear-to-r from-emerald-500 to-transparent rounded-full"></div>
+              <div className="h-1 w-20 bg-gradient-to-r from-emerald-500 to-transparent rounded-full"></div>
               <span className="text-emerald-600 font-semibold tracking-wide uppercase text-sm">
                 Our Story
               </span>
@@ -84,7 +83,7 @@ export default function AboutPage() {
             <h1 className="text-6xl sm:text-7xl font-black text-gray-900 mb-8 leading-tight">
               About{" "}
               <span className="relative inline-block">
-                <span className="relative z-10 text-transparent bg-clip-text bg-linear-to-r from-emerald-600 to-teal-600">
+                <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">
                   EduAtlas
                 </span>
                 <span className="absolute bottom-2 left-0 w-full h-4 bg-emerald-200/50 -z-10"></span>
@@ -105,11 +104,10 @@ export default function AboutPage() {
         <div className="max-w-5xl mx-auto">
           {/* Story */}
           <div
-            className={`mb-32 transition-all duration-1000 delay-200 ${
-              isVisible
+            className={`mb-32 transition-all duration-1000 delay-200 ${isVisible
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-4"
-            }`}
+              }`}
           >
             <div className="relative">
               {/* Large decorative quote mark */}
@@ -119,7 +117,7 @@ export default function AboutPage() {
 
               <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl p-12 border border-emerald-100 shadow-xl shadow-emerald-500/10">
                 <h2 className="text-4xl font-bold text-gray-900 mb-8 flex items-center gap-3">
-                  <div className="w-2 h-8 bg-linear-to-b from-emerald-500 to-teal-500 rounded-full"></div>
+                  <div className="w-2 h-8 bg-gradient-to-b from-emerald-500 to-teal-500 rounded-full"></div>
                   Why I Started This
                 </h2>
                 <div className="space-y-6 text-lg text-gray-700 leading-relaxed pl-5">
@@ -145,18 +143,17 @@ export default function AboutPage() {
 
           {/* Goals */}
           <div
-            className={`mb-32 transition-all duration-1000 delay-400 ${
-              isVisible
+            className={`mb-32 transition-all duration-1000 delay-400 ${isVisible
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-4"
-            }`}
+              }`}
           >
             <div className="text-center mb-16">
               <div className="inline-block">
                 <h2 className="text-4xl font-bold text-gray-900 mb-3">
                   My Goals
                 </h2>
-                <div className="h-1.5 w-full bg-linear-to-r from-transparent via-emerald-500 to-transparent rounded-full"></div>
+                <div className="h-1.5 w-full bg-gradient-to-r from-transparent via-emerald-500 to-transparent rounded-full"></div>
               </div>
             </div>
 
@@ -198,12 +195,12 @@ export default function AboutPage() {
                     className="group relative"
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
-                    <div className="absolute inset-0 bg-linear-to-r from-emerald-500/20 to-teal-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-500 opacity-0 group-hover:opacity-100"></div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-500 opacity-0 group-hover:opacity-100"></div>
 
                     <div className="relative bg-white rounded-2xl p-8 border-2 border-gray-100 hover:border-emerald-200 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 h-full">
                       <div className="flex items-start gap-5">
                         <div
-                          className={`shrink-0 w-14 h-14 rounded-xl bg-linear-to-br ${goal.linear} flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}
+                          className={`shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br ${goal.linear} flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}
                         >
                           <Icon className="w-7 h-7 text-white" />
                         </div>
@@ -225,16 +222,15 @@ export default function AboutPage() {
 
           {/* Vision */}
           <div
-            className={`mb-24 transition-all duration-1000 delay-600 ${
-              isVisible
+            className={`mb-24 transition-all duration-1000 delay-600 ${isVisible
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-4"
-            }`}
+              }`}
           >
             <div className="relative">
-              <div className="absolute inset-0 bg-linear-to-r from-emerald-600 to-teal-600 rounded-3xl blur-lg opacity-50"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-3xl blur-lg opacity-50"></div>
 
-              <div className="relative bg-linear-to-br from-emerald-600 via-emerald-500 to-teal-600 rounded-3xl p-12 overflow-hidden">
+              <div className="relative bg-gradient-to-br from-emerald-600 via-emerald-500 to-teal-600 rounded-3xl p-12 overflow-hidden">
                 {/* Decorative elements */}
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
                 <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full blur-2xl"></div>
@@ -259,40 +255,12 @@ export default function AboutPage() {
                     worldwide.
                   </p>
 
-                  <div className="inline-flex items-center gap-3 bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full text-white font-semibold hover:bg-white/30 transition-all cursor-pointer group">
+                  {/* <div className="inline-flex items-center gap-3 bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full text-white font-semibold hover:bg-white/30 transition-all cursor-pointer group">
                     <span>Join us on this journey</span>
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </div>
+                  </div> */}
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Stats */}
-          <div
-            className={`transition-all duration-1000 delay-800 ${
-              isVisible
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-4"
-            }`}
-          >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {[
-                { value: "50K+", label: "Students Helped" },
-                { value: "10K+", label: "Scholarships" },
-                { value: "500+", label: "Universities" },
-                { value: "150+", label: "Countries" },
-              ].map((stat, index) => (
-                <div key={index} className="text-center group cursor-default">
-                  <div className="relative inline-block mb-3">
-                    <div className="text-5xl font-black text-transparent bg-clip-text bg-linear-to-r from-emerald-600 to-teal-600 group-hover:scale-110 transition-transform">
-                      {stat.value}
-                    </div>
-                    <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-0 h-1 bg-linear-to-r from-emerald-500 to-teal-500 group-hover:w-full transition-all duration-500 rounded-full"></div>
-                  </div>
-                  <div className="text-gray-600 font-medium">{stat.label}</div>
-                </div>
-              ))}
             </div>
           </div>
         </div>

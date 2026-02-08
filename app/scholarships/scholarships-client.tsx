@@ -16,6 +16,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import OptionalSignInCard from "@/components/optional-signin-card";
 
 interface Scholarship {
   id: string;
@@ -197,14 +198,16 @@ export default function ScholarshipsClient({
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-emerald-50 to-white pt-20">
+    <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
         <h1 className="text-3xl font-bold text-gray-900 mb-6">
           Browse{" "}
-          <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-600 to-emerald-400">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-emerald-400">
             Scholarships
           </span>
         </h1>
+
+        <OptionalSignInCard />
 
         {/* Search and Filter Bar */}
         <div className="flex flex-col sm:flex-row gap-4 mb-8">
@@ -366,9 +369,8 @@ export default function ScholarshipsClient({
                     {sortOptions.find((opt) => opt.value === sortBy)?.label}
                   </span>
                   <ChevronDown
-                    className={`w-4 h-4 transition-transform ${
-                      showSortDropdown ? "rotate-180" : ""
-                    }`}
+                    className={`w-4 h-4 transition-transform ${showSortDropdown ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
 
@@ -381,11 +383,10 @@ export default function ScholarshipsClient({
                           setSortBy(option.value);
                           setShowSortDropdown(false);
                         }}
-                        className={`w-full text-left px-4 py-3 text-sm font-medium transition-colors ${
-                          sortBy === option.value
+                        className={`w-full text-left px-4 py-3 text-sm font-medium transition-colors ${sortBy === option.value
                             ? "bg-emerald-50 text-emerald-700 border-l-4 border-emerald-600"
                             : "text-gray-700 hover:bg-gray-50"
-                        }`}
+                          }`}
                       >
                         {option.label}
                       </button>
