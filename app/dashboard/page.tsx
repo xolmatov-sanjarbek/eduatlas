@@ -45,7 +45,7 @@ export default function DashboardPage() {
     if (!mounted || isPending) return;
     if (!session?.user) {
       router.push("/auth/signin");
-    } else if (session.user.userType === "UNIVERSITY") {
+    } else if ((session.user as { userType?: string }).userType === "UNIVERSITY") {
       router.push("/university-dashboard");
     }
   }, [session, isPending, router, mounted]);

@@ -61,18 +61,14 @@ export default function UniversityDashboardPage() {
     if (!mounted || isPending) return;
     if (!session?.user) {
       router.push("/auth/signin");
-    } else if (session.user.userType !== "UNIVERSITY") {
+    } else if ((session.user as { userType?: string }).userType !== "UNIVERSITY") {
       router.push("/dashboard");
     }
   }, [session, isPending, router, mounted]);
 
   useEffect(() => {
-    if (
-      !mounted ||
-      !session?.user ||
-      session.user.userType !== "UNIVERSITY"
-    )
-      return;
+    const userType = (session?.user as { userType?: string } | undefined)?.userType;
+    if (!mounted || !session?.user || userType !== "UNIVERSITY") return;
     fetchDashboardData();
   }, [session?.user, mounted]);
 
