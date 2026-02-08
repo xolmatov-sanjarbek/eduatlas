@@ -13,6 +13,7 @@ model University {
 enum UserType {
   STUDENT
   UNIVERSITY
+  ADMIN
 }
 
 // This is your Prisma schema file,

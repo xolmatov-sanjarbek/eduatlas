@@ -168,6 +168,14 @@ export default function Header1() {
                 )}
               </div>
             ))}
+            {(session?.user as any)?.userType === "ADMIN" && (
+              <Link
+                href="/admin"
+                className="px-5 py-2 text-sm font-medium text-gray-600 hover:text-emerald-600 transition-colors rounded-full hover:bg-white hover:shadow-sm"
+              >
+                Admin
+              </Link>
+            )}
           </nav>
 
           <div className="hidden items-center justify-center space-x-4 lg:flex">
@@ -287,6 +295,15 @@ export default function Header1() {
                       {item.hasDropdown && <ChevronDown className="h-4 w-4 text-gray-400" />}
                     </Link>
                   ))}
+                  {(session?.user as any)?.userType === "ADMIN" && (
+                    <Link
+                      href="/admin"
+                      className="flex items-center px-4 py-3 rounded-xl hover:bg-emerald-50 text-emerald-700 font-medium transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Admin Panel
+                    </Link>
+                  )}
                 </div>
 
                 <div className="h-px bg-gray-100 my-2" />
