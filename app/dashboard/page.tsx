@@ -16,6 +16,7 @@ import {
   Clock,
   DollarSign,
   AlertCircle,
+  Trash2,
 } from "lucide-react";
 import { motion } from "motion/react";
 
@@ -117,7 +118,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-17">
         {/* Hero Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -218,23 +219,6 @@ export default function DashboardPage() {
               </p>
             </div>
           </Link>
-
-          <div className="bg-white rounded-2xl p-8 border border-gray-200 hover:shadow-lg transition-all hover:border-emerald-300 cursor-pointer group">
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-gray-50 rounded-xl group-hover:bg-emerald-50 transition-colors">
-                <Calendar className="w-6 h-6 text-gray-600 group-hover:text-emerald-600 transition-colors" />
-              </div>
-            </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">
-              Application Tracker
-            </h3>
-            <p className="text-gray-600">
-              Keep track of your scholarship applications
-            </p>
-            <span className="inline-block mt-3 text-sm text-emerald-600 font-medium">
-              Coming Soon
-            </span>
-          </div>
         </motion.div>
 
         {/* Saved Scholarships Section */}
@@ -380,7 +364,7 @@ export default function DashboardPage() {
                           variant="ghost"
                           className="flex-1 lg:flex-none hover:bg-red-50 text-red-600 hover:text-red-700 px-6 py-6 rounded-xl transition-all"
                         >
-                          <Heart className="w-4 h-4 mr-2 fill-current" />
+                          <Trash2 className="w-4 h-4 mr-2 fill-current" />
                           Remove
                         </Button>
                       </div>
