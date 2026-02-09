@@ -53,11 +53,11 @@ export default function Footer() {
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-sm text-gray-500">
                 <Mail className="w-4 h-4 text-emerald-500" />
-                <span>support@eduatlas.com</span>
+                <span>xolmatovsanjarbek@proton.me</span>
               </div>
               <div className="flex items-center gap-3 text-sm text-gray-500">
                 <MapPin className="w-4 h-4 text-emerald-500" />
-                <span>San Francisco, CA</span>
+                <span>Tashkent, Uzbekistan</span>
               </div>
             </div>
 
