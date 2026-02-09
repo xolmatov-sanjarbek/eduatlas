@@ -24,7 +24,7 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { name: "Sponsors", href: "/sponsors" },
+  // { name: "Sponsors", href: "/sponsors" },
   { name: "About", href: "/about" },
   { name: "Scholarships", href: "/scholarships" },
 ];

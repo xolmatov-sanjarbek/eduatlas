@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { signIn, signUp } from "@/lib/auth-client";
+import { signIn, signUp, useSession } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
+import { type SessionUser } from "../../../lib/types";
 import {
   Mail,
   Lock,
@@ -19,7 +20,15 @@ import {
 } from "lucide-react";
 
 export default function SignUpPage() {
+  const { data: session } = useSession();
   const router = useRouter();
+
+  if (session?.user) {
+    const user = session.user as SessionUser;
+    router.push(user.userType === "UNIVERSITY" ? "/university-dashboard" : "/dashboard");
+    return null;
+  }
+
   const [userType, setUserType] = useState<"STUDENT" | "UNIVERSITY" | null>(
     null,
   );
@@ -90,7 +99,7 @@ export default function SignUpPage() {
       setTimeout(
         () =>
           router.push(
-            userType === "UNIVERSITY" ? "/university-dashboard" : "/dashboard",
+            `/verify-request?email=${encodeURIComponent(email)}`
           ),
         1500,
       );

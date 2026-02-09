@@ -17,6 +17,7 @@ import {
   DollarSign,
   AlertCircle,
   Trash2,
+  Mail,
 } from "lucide-react";
 import { motion } from "motion/react";
 
@@ -139,6 +140,33 @@ export default function DashboardPage() {
             Track your scholarship journey and discover new opportunities
           </p>
         </motion.div>
+
+        {/* Verification Banner */}
+        {!session.user.emailVerified && (
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mb-12"
+          >
+            <div className="bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-100 rounded-[2rem] p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl shadow-emerald-500/5">
+              <div className="flex items-center gap-6">
+                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-sm">
+                  <Mail className="w-7 h-7 text-emerald-600" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900">Verify your email address</h3>
+                  <p className="text-gray-600">Please verify your email to access all platform features and stay updated.</p>
+                </div>
+              </div>
+              <Link href={`/verify-request?email=${encodeURIComponent(session.user.email)}`}>
+                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-6 rounded-xl font-bold shadow-lg shadow-emerald-500/20 transition-all hover:scale-[1.02]">
+                  Verify Now
+                </Button>
+              </Link>
+            </div>
+          </motion.div>
+        )}
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">

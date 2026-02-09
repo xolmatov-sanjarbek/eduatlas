@@ -14,6 +14,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
+    "@react-email/components": "^1.0.7",
     "bcryptjs": "^3.0.3",
     "better-auth": "^1.4.18",
     "canvas-confetti": "^1.9.4",
@@ -28,7 +29,9 @@
     "radix-ui": "^1.4.3",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-email": "^5.2.8",
     "react-hook-form": "^7.71.1",
+    "resend": "^6.9.1",
     "tailwind-merge": "^3.4.0",
     "zod": "^4.3.6"
   },
