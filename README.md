@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌍 EduAtlas
 
-## Getting Started
+**Empowering Students Worldwide.**
 
-First, run the development server:
+EduAtlas is a modern scholarship platform that bridges the gap between students, universities, and sponsors. It provides a seamless way to discover financial aid, manage scholarship applications, and empower the next generation of global talent.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Key Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **🔍 Smart Discovery**: Filter thousands of scholarships by country, degree level, and funding amount.
+- **🏛️ University Portals**: Dedicated dashboards for institutions to manage their scholarship offerings.
+- **💰 Sponsor Management**: Tools for sponsors to create and track educational funding.
+- **🛡️ Secure Auth**: Robust authentication flow powered by [Better Auth](https://better-auth.com) and [Resend](https://resend.com).
+- **📱 Responsive Design**: A stunning, modern interface built with Tailwind CSS 4 and Framer Motion.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠️ Tech Stack
 
-## Learn More
+- **Framework**: [Next.js](https://nextjs.org/) (App Router)
+- **Database**: [PostgreSQL](https://www.postgresql.org/) with [Prisma ORM](https://www.prisma.io/)
+- **Auth**: [Better Auth](https://better-auth.com/)
+- **UI Components**: [Radix UI](https://www.radix-ui.com/) & [Lucide Icons](https://lucide.dev/)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Email**: [Resend](https://resend.com/) & [React Email](https://react.email/)
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 Getting Started
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Prerequisites
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Node.js / Bun
+- PostgreSQL database
 
-## Deploy on Vercel
+### Installation
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/eduatlas.git
+   cd eduatlas
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2. **Install dependencies:**
+   ```bash
+   npm install
+   # or
+   bun install
+   ```
+
+3. **Set up environment variables:**
+   Create a `.env` file in the root directory and add your credentials (see `.env.example` if available).
+
+4. **Initialize the database:**
+   ```bash
+   npx prisma generate
+   npm run db:create-verification # For Better Auth verification table
+   npm run db:migrate # Execute migrations
+   ```
+
+5. **Seed the database (Optional):**
+   ```bash
+   npx prisma db seed
+   ```
+
+6. **Run the development server:**
+   ```bash
+   npm run dev
+   # or
+   bun dev
+   ```
+
+Open [http://localhost:3000](http://localhost:3000) to see your local instance of EduAtlas!
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+Built with ❤️ by the EduAtlas Team.
