@@ -65,7 +65,7 @@ export function ScholarshipForm({ initialData, id }: ScholarshipFormProps) {
 
             if (!res.ok) {
                 const result = await res.json();
-                throw new Error(result.error || `Failed to ${isEditMode ? 'update' : 'create'} scholarship`);
+                throw new Error(result.error || (isEditMode ? "Failed to update scholarship" : "Failed to create scholarship"));
             }
 
             router.push("/university-dashboard");
@@ -97,10 +97,10 @@ export function ScholarshipForm({ initialData, id }: ScholarshipFormProps) {
                     <div className="p-2 bg-emerald-100 rounded-xl">
                         {isEditMode ? <Edit2 className="w-6 h-6 text-emerald-600" /> : <Building2 className="w-6 h-6 text-emerald-600" />}
                     </div>
-                    <h1 className="text-3xl font-bold text-gray-900">{isEditMode ? 'Edit Scholarship' : 'Add New Scholarship'}</h1>
+                    <h1 className="text-3xl font-bold text-gray-900">{isEditMode ? "Edit Scholarship" : "Add New Scholarship"}</h1>
                 </div>
                 <p className="text-gray-600 max-w-2xl ml-[52px]">
-                    {isEditMode ? 'Update your scholarship details. Remember, you can only edit this once.' : 'Create a comprehensive listing to attract the best candidates. All fields marked with * are required.'}
+                    {isEditMode ? "Update your scholarship details. Remember, you can only edit this once." : "Create a comprehensive listing to attract the best candidates. All fields marked with * are required."}
                 </p>
             </div>
 
@@ -305,12 +305,12 @@ export function ScholarshipForm({ initialData, id }: ScholarshipFormProps) {
                         {isSubmitting ? (
                             <>
                                 <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                                {isEditMode ? 'Updating...' : 'Publishing...'}
+                                {isEditMode ? "Updating..." : "Publishing..."}
                             </>
                         ) : (
                             <>
                                 <CheckCircle2 className="mr-2 h-5 w-5" />
-                                {isEditMode ? 'Update Scholarship' : 'Publish Scholarship'}
+                                {isEditMode ? "Update Scholarship" : "Publish Scholarship"}
                             </>
                         )}
                     </Button>

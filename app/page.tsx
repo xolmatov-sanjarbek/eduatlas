@@ -4,7 +4,6 @@ import Hero from "@/components/hero";
 import HowItWorks from "@/components/how-it-works";
 import Navbar from "@/components/navbar";
 import ScholarshipsSection from "@/components/scholarships";
-import SponsorsSection from "@/components/sponsors";
 
 const Home = () => {
   return (
@@ -12,9 +11,6 @@ const Home = () => {
       <Hero />
       <HowItWorks />
       <ScholarshipsSection />
-      <div id="sponsors">
-        <SponsorsSection />
-      </div>
       <About />
     </main>
   );

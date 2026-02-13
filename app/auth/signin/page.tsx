@@ -50,11 +50,21 @@ export default function SignInPage() {
       // For universities, use email and password
       setLoading(true);
       try {
-        await signIn.email({
+        const { error: signInError } = await signIn.email({
           email,
           password,
           callbackURL: "/university-dashboard",
         });
+
+        if (signInError) {
+          if (signInError.status === 401 && signInError.message?.toLowerCase().includes("verify")) {
+            setError("Please verify your email address before signing in. Check your inbox for the verification link.");
+          } else {
+            setError(signInError.message || "Invalid email or password.");
+          }
+          return;
+        }
+
         setSuccess(true);
         setTimeout(() => router.push("/university-dashboard"), 1500);
       } catch (err: any) {
@@ -66,11 +76,21 @@ export default function SignInPage() {
       // For students, use email and password
       setLoading(true);
       try {
-        await signIn.email({
+        const { error: signInError } = await signIn.email({
           email,
           password,
           callbackURL: "/dashboard",
         });
+
+        if (signInError) {
+          if (signInError.status === 401 && signInError.message?.toLowerCase().includes("verify")) {
+            setError("Please verify your email address before signing in. Check your inbox for the verification link.");
+          } else {
+            setError(signInError.message || "Invalid email or password.");
+          }
+          return;
+        }
+
         setSuccess(true);
         setTimeout(() => router.push("/dashboard"), 1500);
       } catch (err: any) {

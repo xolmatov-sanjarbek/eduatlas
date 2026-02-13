@@ -9,9 +9,11 @@ import {
     Clock,
     ArrowRight,
     Star,
+    Flag,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 interface Scholarship {
     id: string;
@@ -33,6 +35,10 @@ interface ScholarshipGridProps {
 }
 
 export default function ScholarshipGrid({ scholarships }: ScholarshipGridProps) {
+    const [reportedIds, setReportedIds] = useState<Set<string>>(new Set());
+    const [reportingIds, setReportingIds] = useState<Set<string>>(new Set());
+    const [reportOpenId, setReportOpenId] = useState<string | null>(null);
+    const [reportReason, setReportReason] = useState("");
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -172,19 +178,102 @@ export default function ScholarshipGrid({ scholarships }: ScholarshipGridProps) 
                             <span>Updated {new Date(scholarship.updatedAt).toLocaleDateString()}</span>
                         </div>
 
-                        <Link href={`/scholarships/${scholarship.slug}`}>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 p-0 h-auto font-semibold hover:no-underline group/btn"
+                        <div className="flex items-center gap-3">
+                            <button
+                                type="button"
+                                onClick={async () => {
+                                    if (reportedIds.has(scholarship.id) || reportingIds.has(scholarship.id)) return;
+                                    setReportOpenId(scholarship.id);
+                                }}
+                                className={`inline-flex items-center gap-1 text-xs font-semibold transition-colors ${reportedIds.has(scholarship.id)
+                                        ? "text-gray-400 cursor-default"
+                                        : "text-gray-500 hover:text-red-600"
+                                    }`}
+                                aria-label="Report scholarship"
+                                title={reportedIds.has(scholarship.id) ? "Reported" : "Report"}
                             >
-                                View Details
-                                <ArrowRight className="w-4 h-4 ml-1 group-hover/btn:translate-x-1 transition-transform" />
-                            </Button>
-                        </Link>
+                                <Flag className="w-3.5 h-3.5" />
+                                {reportedIds.has(scholarship.id) ? "Reported" : "Report"}
+                            </button>
+
+                            <Link href={`/scholarships/${scholarship.slug}`}>
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 p-0 h-auto font-semibold hover:no-underline group/btn"
+                                >
+                                    View Details
+                                    <ArrowRight className="w-4 h-4 ml-1 group-hover/btn:translate-x-1 transition-transform" />
+                                </Button>
+                            </Link>
+                        </div>
                     </div>
                 </motion.div>
             ))}
+
+            {reportOpenId && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+                    <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-gray-100 p-6">
+                        <h3 className="text-lg font-bold text-gray-900 mb-2">Report scholarship</h3>
+                        <p className="text-sm text-gray-500 mb-4">Tell us what’s wrong. Your report helps us keep listings accurate.</p>
+                        <textarea
+                            value={reportReason}
+                            onChange={(e) => setReportReason(e.target.value)}
+                            className="w-full min-h-[120px] rounded-xl border border-gray-200 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+                            placeholder="Optional reason..."
+                            maxLength={500}
+                        />
+                        <div className="mt-4 flex items-center justify-between">
+                            <span className="text-xs text-gray-400">{reportReason.length}/500</span>
+                            <div className="flex items-center gap-2">
+                                <Button
+                                    variant="ghost"
+                                    className="h-9 px-4 text-gray-600"
+                                    onClick={() => {
+                                        setReportOpenId(null);
+                                        setReportReason("");
+                                    }}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    className="h-9 px-4 bg-emerald-600 hover:bg-emerald-700 text-white"
+                                    disabled={reportingIds.has(reportOpenId)}
+                                    onClick={async () => {
+                                        const id = reportOpenId;
+                                        if (!id) return;
+                                        setReportingIds((prev) => new Set([...prev, id]));
+                                        try {
+                                            const res = await fetch(`/api/scholarships/${id}/report`, {
+                                                method: "POST",
+                                                headers: { "Content-Type": "application/json" },
+                                                body: JSON.stringify({ reason: reportReason }),
+                                            });
+                                            if (res.ok) {
+                                                setReportedIds((prev) => new Set([...prev, id]));
+                                                setReportOpenId(null);
+                                                setReportReason("");
+                                            } else {
+                                                console.error("Failed to report scholarship");
+                                            }
+                                        } catch (err) {
+                                            console.error("Failed to report scholarship:", err);
+                                        } finally {
+                                            setReportingIds((prev) => {
+                                                const next = new Set(prev);
+                                                next.delete(id);
+                                                return next;
+                                            });
+                                        }
+                                    }}
+                                >
+                                    Submit Report
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </motion.div>
     );
 }

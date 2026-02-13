@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import ScholarshipDetailClient from "./scholarship-detail-client";
+import { normalizeScholarship } from "@/lib/normalize-scholarship";
 
 export default async function ScholarshipDetailPage({
   params,
@@ -19,9 +20,9 @@ export default async function ScholarshipDetailPage({
     console.warn("Scholarship detail: could not load from database", err);
   }
 
-  if (!scholarship) {
+  if (!scholarship || scholarship.removedAt) {
     redirect("/scholarships");
   }
 
-  return <ScholarshipDetailClient scholarship={scholarship} />;
+  return <ScholarshipDetailClient scholarship={normalizeScholarship(scholarship)} />;
 }

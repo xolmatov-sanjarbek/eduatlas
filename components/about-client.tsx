@@ -191,10 +191,7 @@ export default function AboutClient({ stats, values }: AboutClientProps) {
           <motion.div variants={itemVariants} className="text-center mt-16">
             <p className="text-2xl text-gray-700 font-medium max-w-4xl mx-auto leading-relaxed">
               Your education dreams shouldn't be limited by finances.
-              <span className="text-emerald-600 font-bold">
-                {" "}
-                Let's find your scholarship together.
-              </span>
+              <span className="text-emerald-600 font-bold"> Let's find your scholarship together.</span>
             </p>
           </motion.div>
         </motion.div>

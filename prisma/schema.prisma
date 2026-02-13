@@ -6,6 +6,7 @@ model University {
   image        String?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+  isVerified   Boolean       @default(false)
   scholarships Scholarship[]
   users        User[]
 }
@@ -23,8 +24,7 @@ enum UserType {
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../lib/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -32,44 +32,49 @@ datasource db {
 }
 
 model Scholarship {
-  id              String             @id @default(cuid())
-  slug            String             @unique
-  createdAt       DateTime           @default(now())
-  updatedAt       DateTime           @updatedAt
+  id              String              @id @default(cuid())
+  slug            String              @unique
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
   title           String
-  description     String             @db.Text
+  description     String
   providerName    String
   amount          Float
   currency        String
-  fieldOfStudy    String[]
+  fieldOfStudy    String
   degreeLevel     String
   targetCountry   String
-  eligibleRegions String[]
+  eligibleRegions String
   deadline        DateTime?
   officialWebsite String?
-  isFeatured      Boolean            @default(false)
+  isFeatured      Boolean             @default(false)
   views           Int
-  isEdited        Boolean            @default(false)
+  isEdited        Boolean             @default(false)
+  removedAt       DateTime?
+  removedReason   String?
   savedBy         SavedScholarship[]
+  reports         ScholarshipReport[]
   universityId    String?
-  university      University?        @relation(fields: [universityId], references: [id], onDelete: SetNull)
+  university      University?         @relation(fields: [universityId], references: [id], onDelete: SetNull)
 }
 
 model User {
-  id                String             @id
+  id                String              @id
   name              String
   email             String
   password          String? // Hashed password (optional for OAuth users)
-  emailVerified     Boolean            @default(false)
+  emailVerified     Boolean             @default(false)
   image             String?
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
   sessions          Session[]
   accounts          Account[]
   savedScholarships SavedScholarship[]
-  userType          UserType           @default(STUDENT)
+  reports           ScholarshipReport[]
+  userType          UserType            @default(STUDENT)
   universityId      String?
-  university        University?        @relation(fields: [universityId], references: [id], onDelete: SetNull)
+  universityWebsite String?
+  university        University?         @relation(fields: [universityId], references: [id], onDelete: SetNull)
 
   @@unique([email])
   @@map("user")
@@ -135,4 +140,19 @@ model SavedScholarship {
   @@unique([userId, scholarshipId])
   @@index([userId])
   @@index([scholarshipId])
+}
+
+model ScholarshipReport {
+  id            String   @id @default(cuid())
+  scholarshipId String
+  userId        String?
+  reason        String?
+  createdAt     DateTime @default(now())
+
+  scholarship Scholarship @relation(fields: [scholarshipId], references: [id], onDelete: Cascade)
+  user        User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([scholarshipId])
+  @@index([userId])
+  @@index([createdAt])
 }

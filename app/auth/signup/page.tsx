@@ -69,31 +69,16 @@ export default function SignUpPage() {
     setLoading(true);
 
     try {
-      // Use better-auth's signUp for both students and universities
+      // Use better-auth's signUp with additional fields
       await signUp.email({
         email,
         password,
         name,
+        userType,
+        universityWebsite: userType === "UNIVERSITY" ? universityWebsite : undefined,
         callbackURL:
           userType === "UNIVERSITY" ? "/university-dashboard" : "/dashboard",
       });
-
-      // If university, create the university record and link the user
-      if (userType === "UNIVERSITY") {
-        const updateRes = await fetch("/api/auth/setup-university", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email,
-            universityWebsite,
-          }),
-        });
-
-        if (!updateRes.ok) {
-          const data = await updateRes.json();
-          throw new Error(data.error || "Failed to setup university");
-        }
-      }
 
       setSuccess(true);
       setTimeout(

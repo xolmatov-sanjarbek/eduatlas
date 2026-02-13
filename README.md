@@ -41,8 +41,6 @@ EduAtlas is a modern scholarship platform that bridges the gap between students,
 
 2. **Install dependencies:**
    ```bash
-   npm install
-   # or
    bun install
    ```
 
@@ -51,20 +49,18 @@ EduAtlas is a modern scholarship platform that bridges the gap between students,
 
 4. **Initialize the database:**
    ```bash
-   npx prisma generate
-   npm run db:create-verification # For Better Auth verification table
-   npm run db:migrate # Execute migrations
+   bun x prisma generate
+   bun run db:create-verification # For Better Auth verification table
+   bun run db:migrate # Execute migrations
    ```
 
 5. **Seed the database (Optional):**
    ```bash
-   npx prisma db seed
+   bun x prisma db seed
    ```
 
 6. **Run the development server:**
    ```bash
-   npm run dev
-   # or
    bun dev
    ```
 

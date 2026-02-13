@@ -98,6 +98,15 @@ export async function PATCH(
         }
 
         // Update fields
+        const fieldOfStudy =
+            Array.isArray(body.fieldOfStudy)
+                ? body.fieldOfStudy.join(", ")
+                : body.fieldOfStudy;
+        const eligibleRegions =
+            Array.isArray(body.eligibleRegions)
+                ? body.eligibleRegions.join(", ")
+                : body.eligibleRegions;
+
         const updatedScholarship = await prisma.scholarship.update({
             where: { id },
             data: {
@@ -108,8 +117,8 @@ export async function PATCH(
                 deadline: body.deadline ? new Date(body.deadline) : null,
                 targetCountry: body.targetCountry,
                 degreeLevel: body.degreeLevel,
-                fieldOfStudy: body.fieldOfStudy,
-                eligibleRegions: body.eligibleRegions,
+                fieldOfStudy,
+                eligibleRegions,
                 officialWebsite: body.officialWebsite,
                 isEdited: true, // Mark as edited
             },

@@ -16,8 +16,33 @@ export async function GET(req: Request) {
       where: { id: session.user.id },
     });
 
-    if (!user || user.userType !== "UNIVERSITY" || !user.universityId) {
+    if (!user || user.userType !== "UNIVERSITY") {
       return Response.json({ error: "Not a university account" }, { status: 403 });
+    }
+
+    // If university record doesn't exist yet, create it from saved website
+    const userData = user as any;
+    if (!user.universityId && userData.universityWebsite) {
+      const university = await prisma.university.create({
+        data: {
+          name: user.name,
+          email: user.email,
+          website: userData.universityWebsite,
+        },
+      });
+
+      // Link it back to the user
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { universityId: university.id },
+      });
+
+      // Update local object for subsequent logic
+      (user as any).universityId = university.id;
+    }
+
+    if (!user.universityId) {
+      return Response.json({ error: "University setup incomplete" }, { status: 400 });
     }
 
     const university = await prisma.university.findUnique({
@@ -29,8 +54,19 @@ export async function GET(req: Request) {
     }
 
     const scholarships = await prisma.scholarship.findMany({
-      where: { universityId: university.id },
+      where: { universityId: university.id, removedAt: null },
       orderBy: { createdAt: "desc" },
+    });
+
+    const removedScholarships = await prisma.scholarship.findMany({
+      where: { universityId: university.id, removedAt: { not: null } },
+      orderBy: { removedAt: "desc" },
+      select: {
+        id: true,
+        title: true,
+        removedAt: true,
+        removedReason: true,
+      },
     });
 
     // Calculate stats
@@ -70,6 +106,7 @@ export async function GET(req: Request) {
         name: university.name,
         email: university.email,
         website: university.website,
+        isVerified: university.isVerified,
         createdAt: university.createdAt.toISOString(),
       },
       scholarships: enrichedScholarships.map((s) => ({
@@ -82,6 +119,12 @@ export async function GET(req: Request) {
         savedCount: s.savedCount,
         deadline: s.deadline?.toISOString(),
         createdAt: s.createdAt.toISOString(),
+      })),
+      removedScholarships: removedScholarships.map((s) => ({
+        id: s.id,
+        title: s.title,
+        removedAt: s.removedAt?.toISOString() || null,
+        removedReason: s.removedReason,
       })),
       stats,
     });

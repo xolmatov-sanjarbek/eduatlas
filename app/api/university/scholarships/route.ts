@@ -23,8 +23,28 @@ export async function POST(req: Request) {
             }
         });
 
-        if (!user || user.userType !== "UNIVERSITY" || !user.universityId) {
-            return NextResponse.json({ error: "Forbidden: Only universities can post scholarships" }, { status: 403 });
+        if (!user) {
+            return NextResponse.json({ error: "User not found" }, { status: 404 });
+        }
+
+        const isAdmin = user.userType === "ADMIN";
+        const isUniversity = user.userType === "UNIVERSITY";
+
+        if (!isAdmin && (!isUniversity || !user.universityId)) {
+            return NextResponse.json({ error: "Forbidden: Only universities or admins can post scholarships" }, { status: 403 });
+        }
+
+        if (isUniversity) {
+            const university = await prisma.university.findUnique({
+                where: { id: user.universityId! },
+                select: { isVerified: true }
+            });
+
+            if (!university?.isVerified) {
+                return NextResponse.json({
+                    error: "Your university account is not yet verified by an administrator. You cannot post scholarships until your account is verified."
+                }, { status: 403 });
+            }
         }
 
         const body = await req.json();
@@ -39,6 +59,15 @@ export async function POST(req: Request) {
         const randomSuffix = Math.random().toString(36).substring(2, 7);
         slug = `${slug}-${randomSuffix}`;
 
+        const fieldOfStudy =
+            Array.isArray(body.fieldOfStudy)
+                ? body.fieldOfStudy.join(", ")
+                : body.fieldOfStudy;
+        const eligibleRegions =
+            Array.isArray(body.eligibleRegions)
+                ? body.eligibleRegions.join(", ")
+                : body.eligibleRegions || "";
+
         const scholarship = await prisma.scholarship.create({
             data: {
                 slug,
@@ -50,8 +79,8 @@ export async function POST(req: Request) {
                 deadline: body.deadline ? new Date(body.deadline) : null,
                 targetCountry: body.targetCountry,
                 degreeLevel: body.degreeLevel,
-                fieldOfStudy: body.fieldOfStudy,
-                eligibleRegions: body.eligibleRegions || [],
+                fieldOfStudy,
+                eligibleRegions,
                 officialWebsite: body.officialWebsite || null,
                 universityId: user.universityId,
                 views: 0,

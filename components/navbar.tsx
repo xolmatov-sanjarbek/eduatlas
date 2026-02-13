@@ -10,10 +10,9 @@ import {
   GraduationCap,
   LogOut,
   User,
-  Sparkles,
 } from "lucide-react";
+
 import Link from "next/link";
-import { useTheme } from "next-themes";
 import { useSession, signOut } from "@/lib/auth-client";
 
 interface NavItem {
@@ -23,19 +22,17 @@ interface NavItem {
   dropdownItems?: { name: string; href: string; description?: string }[];
 }
 
-const navItems: NavItem[] = [
-  // { name: "Sponsors", href: "/sponsors" },
-  { name: "About", href: "/about" },
-  { name: "Scholarships", href: "/scholarships" },
-];
-
 export default function Header1() {
+  const navItems: NavItem[] = [
+    // { name: "Sponsors", href: "/sponsors" },
+    { name: "About", href: "/about" },
+    { name: "Scholarships", href: "/scholarships" },
+  ];
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const { data: session } = useSession();
-  const { theme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,8 +66,16 @@ export default function Header1() {
   };
 
   const mobileMenuVariants = {
-    closed: { opacity: 0, height: 0, transition: { duration: 0.3, ease: "easeInOut" as const } },
-    open: { opacity: 1, height: "auto", transition: { duration: 0.3, ease: "easeInOut" as const } },
+    closed: {
+      opacity: 0,
+      height: 0,
+      transition: { duration: 0.3, ease: "easeInOut" as const },
+    },
+    open: {
+      opacity: 1,
+      height: "auto",
+      transition: { duration: 0.3, ease: "easeInOut" as const },
+    },
   };
 
   const dropdownVariants = {
@@ -93,17 +98,13 @@ export default function Header1() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <Link
-              prefetch={false}
-              href="/"
-              className="flex items-center gap-2 group"
-            >
-              <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/20 group-hover:shadow-emerald-500/30 transition-shadow duration-300">
+            <Link href="/" className="flex items-center gap-2 group">
+              <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/20 group-hover:shadow-emerald-500/30 transition-shadow duration-300">
                 <GraduationCap className="h-6 w-6 text-white" />
                 <div className="absolute inset-0 rounded-xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
               <div className="flex flex-col">
-                <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-xl font-bold text-transparent">
+                <span className="bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-xl font-bold text-transparent">
                   EduAtlas
                 </span>
                 <span className="text-[10px] font-medium text-gray-500 tracking-wider uppercase">
@@ -124,7 +125,6 @@ export default function Header1() {
                 onMouseLeave={() => setActiveDropdown(null)}
               >
                 <Link
-                  prefetch={false}
                   href={item.href}
                   className="relative px-5 py-2 text-sm font-medium text-gray-600 hover:text-emerald-600 transition-colors rounded-full hover:bg-white hover:shadow-sm flex items-center gap-1 group"
                 >
@@ -147,7 +147,6 @@ export default function Header1() {
                       >
                         {item.dropdownItems?.map((dropdownItem) => (
                           <Link
-                            prefetch={false}
                             key={dropdownItem.name}
                             href={dropdownItem.href}
                             className="block px-4 py-3 rounded-xl hover:bg-emerald-50 transition-colors group"
@@ -180,7 +179,10 @@ export default function Header1() {
 
           <div className="hidden items-center justify-center space-x-4 lg:flex">
             {session?.user ? (
-              <div className="relative" onMouseLeave={() => setShowUserMenu(false)}>
+              <div
+                className="relative"
+                onMouseLeave={() => setShowUserMenu(false)}
+              >
                 <motion.button
                   onClick={() => setShowUserMenu(!showUserMenu)}
                   onMouseEnter={() => setShowUserMenu(true)}
@@ -191,10 +193,12 @@ export default function Header1() {
                   <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-sm">
                     {session.user.name?.[0] || session.user.email?.[0] || "U"}
                   </div>
-                  <span className="font-medium text-sm max-w-[100px] truncate">
+                  <span className="font-medium text-sm max-w-25 truncate">
                     {session.user.name?.split(" ")[0] || "User"}
                   </span>
-                  <ChevronDown className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-300 ${showUserMenu ? "rotate-180" : ""}`} />
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-300 ${showUserMenu ? "rotate-180" : ""}`}
+                  />
                 </motion.button>
 
                 <AnimatePresence>
@@ -207,12 +211,20 @@ export default function Header1() {
                       className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 z-50 overflow-hidden"
                     >
                       <div className="px-4 py-3 border-b border-gray-100 mb-1">
-                        <p className="text-sm font-semibold text-gray-900">Signed in as</p>
-                        <p className="text-xs text-gray-500 truncate">{session.user.email}</p>
+                        <p className="text-sm font-semibold text-gray-900">
+                          Signed in as
+                        </p>
+                        <p className="text-xs text-gray-500 truncate">
+                          {session.user.email}
+                        </p>
                       </div>
 
                       <Link
-                        href={(session.user as any).userType === "UNIVERSITY" ? "/university-dashboard" : "/dashboard"}
+                        href={
+                          (session.user as any).userType === "UNIVERSITY"
+                            ? "/university-dashboard"
+                            : "/dashboard"
+                        }
                         className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-emerald-600 rounded-xl transition-colors font-medium"
                       >
                         <User className="w-4 h-4" />
@@ -249,7 +261,7 @@ export default function Header1() {
                 >
                   <Link
                     href="/auth/signup"
-                    className="inline-flex items-center space-x-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all duration-300"
+                    className="inline-flex items-center space-x-2 rounded-full bg-linear-to-r from-emerald-500 to-teal-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all duration-300"
                   >
                     <span>Get Started</span>
                     <ArrowRight className="h-4 w-4" />
@@ -285,14 +297,15 @@ export default function Header1() {
                 <div className="space-y-1">
                   {navItems.map((item) => (
                     <Link
-                      prefetch={false}
                       key={item.name}
                       href={item.href}
                       className="flex items-center justify-between px-4 py-3 rounded-xl hover:bg-gray-50 text-gray-700 font-medium transition-colors"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {item.name}
-                      {item.hasDropdown && <ChevronDown className="h-4 w-4 text-gray-400" />}
+                      {item.hasDropdown && (
+                        <ChevronDown className="h-4 w-4 text-gray-400" />
+                      )}
                     </Link>
                   ))}
                   {(session?.user as any)?.userType === "ADMIN" && (
@@ -311,7 +324,11 @@ export default function Header1() {
                 {session?.user ? (
                   <div className="space-y-1">
                     <Link
-                      href={(session.user as any).userType === "UNIVERSITY" ? "/university-dashboard" : "/dashboard"}
+                      href={
+                        (session.user as any).userType === "UNIVERSITY"
+                          ? "/university-dashboard"
+                          : "/dashboard"
+                      }
                       className="flex items-center gap-2 px-4 py-3 rounded-xl hover:bg-emerald-50 text-emerald-700 font-medium transition-colors"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
@@ -332,7 +349,6 @@ export default function Header1() {
                 ) : (
                   <div className="p-2 space-y-2">
                     <Link
-                      prefetch={false}
                       href="/auth/signin"
                       className="flex items-center justify-center w-full px-4 py-2.5 rounded-xl border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 transition-colors"
                       onClick={() => setIsMobileMenuOpen(false)}
@@ -340,9 +356,8 @@ export default function Header1() {
                       Log in
                     </Link>
                     <Link
-                      prefetch={false}
                       href="/auth/signup"
-                      className="flex items-center justify-center w-full px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold shadow-lg shadow-emerald-500/20"
+                      className="flex items-center justify-center w-full px-4 py-2.5 rounded-xl bg-linear-to-r from-emerald-500 to-teal-600 text-white font-semibold shadow-lg shadow-emerald-500/20"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Sign Up Free

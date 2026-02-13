@@ -19,6 +19,8 @@ import {
   Calendar,
   MoreVertical,
   Search,
+  AlertTriangle,
+  ShieldCheck,
 } from "lucide-react";
 import { motion } from "motion/react";
 
@@ -28,6 +30,7 @@ interface UniversityDashboardData {
     name: string;
     email: string;
     website?: string;
+    isVerified: boolean;
     createdAt: string;
   };
   scholarships: {
@@ -48,6 +51,12 @@ interface UniversityDashboardData {
     totalSaved: number;
     totalAmount: number;
   };
+  removedScholarships: {
+    id: string;
+    title: string;
+    removedAt: string | null;
+    removedReason: string | null;
+  }[];
 }
 
 export default function UniversityDashboardPage() {
@@ -57,10 +66,26 @@ export default function UniversityDashboardPage() {
     useState<UniversityDashboardData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const [dismissedRemovedIds, setDismissedRemovedIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    try {
+      const raw = localStorage.getItem("dismissedRemovedScholarships");
+      if (raw) {
+        const ids = JSON.parse(raw);
+        if (Array.isArray(ids)) {
+          setDismissedRemovedIds(new Set(ids));
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }, [mounted]);
 
   useEffect(() => {
     if (!mounted || isPending) return;
@@ -106,6 +131,93 @@ export default function UniversityDashboardPage() {
     <div className="min-h-screen bg-gray-50/50 pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
+        {dashboardData && !dashboardData.university.isVerified && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8 p-4 bg-orange-50 border border-orange-200 rounded-2xl flex items-start gap-4 shadow-sm shadow-orange-100"
+          >
+            <div className="p-2 bg-orange-100 rounded-xl">
+              <AlertTriangle className="w-5 h-5 text-orange-600" />
+            </div>
+            <div>
+              <h3 className="font-bold text-orange-900">Account Pending Verification</h3>
+              <p className="text-sm text-orange-700 mt-0.5">
+                Your university account is currently under review by our administrators.
+                You will be able to publish scholarships once your institution has been verified.
+              </p>
+            </div>
+          </motion.div>
+        )}
+
+        {dashboardData && dashboardData.university.isVerified && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8 p-4 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center gap-3 shadow-sm shadow-emerald-50"
+          >
+            <div className="p-1 px-2 bg-emerald-100 rounded-full flex items-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+              <span className="text-[10px] font-black uppercase tracking-tight text-emerald-700">Verified Institution</span>
+            </div>
+            <p className="text-xs text-emerald-600 font-medium italic">Your account is fully verified and you can now promote scholarships.</p>
+          </motion.div>
+        )}
+
+        {dashboardData &&
+          dashboardData.removedScholarships?.filter((item) => !dismissedRemovedIds.has(item.id)).length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8 p-4 bg-red-50 border border-red-200 rounded-2xl shadow-sm shadow-red-100"
+          >
+            <div className="flex items-start gap-3">
+              <div className="p-2 bg-red-100 rounded-xl">
+                <AlertTriangle className="w-5 h-5 text-red-600" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-bold text-red-900">Scholarship Removed by Admins</h3>
+                <p className="text-sm text-red-700 mt-0.5">
+                  One or more of your scholarships were removed by administrators. Please review the details below.
+                </p>
+                <ul className="mt-3 space-y-2">
+                  {dashboardData.removedScholarships
+                    .filter((item) => !dismissedRemovedIds.has(item.id))
+                    .map((item) => (
+                    <li key={item.id} className="text-sm text-red-800">
+                      <span className="font-semibold">{item.title}</span>
+                      {item.removedReason ? (
+                        <span className="text-red-700"> — {item.removedReason}</span>
+                      ) : null}
+                      <button
+                        type="button"
+                        className="ml-3 text-xs text-red-600 hover:text-red-700 underline"
+                        onClick={() => {
+                          setDismissedRemovedIds((prev) => {
+                            const next = new Set(prev);
+                            next.add(item.id);
+                            try {
+                              localStorage.setItem(
+                                "dismissedRemovedScholarships",
+                                JSON.stringify(Array.from(next)),
+                              );
+                            } catch {
+                              // ignore
+                            }
+                            return next;
+                          });
+                        }}
+                      >
+                        Dismiss
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
           <div>
@@ -119,8 +231,11 @@ export default function UniversityDashboardPage() {
                 Edit Profile
               </Button>
             </Link>
-            <Link href="/university-dashboard/add">
-              <Button className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-200 shadow-lg">
+            <Link href="/university-dashboard/add" className={!dashboardData?.university.isVerified ? "pointer-events-none" : ""}>
+              <Button
+                disabled={!dashboardData?.university.isVerified}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-200 shadow-lg disabled:opacity-50"
+              >
                 <Plus className="w-4 h-4 mr-2" />
                 Create Scholarship
               </Button>
@@ -228,8 +343,11 @@ export default function UniversityDashboardPage() {
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-1">No scholarships yet</h3>
                 <p className="text-gray-500 mb-6 max-w-sm mx-auto">Create your first scholarship opportunity to start attracting talented students from around the world.</p>
-                <Link href="/university-dashboard/add">
-                  <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                <Link href="/university-dashboard/add" className={!dashboardData?.university.isVerified ? "pointer-events-none" : ""}>
+                  <Button
+                    disabled={!dashboardData?.university.isVerified}
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-50"
+                  >
                     <Plus className="w-4 h-4 mr-2" />
                     Create Scholarship
                   </Button>
@@ -333,9 +451,11 @@ export default function UniversityDashboardPage() {
               <div className="relative z-10">
                 <h3 className="font-bold text-lg mb-2">Need Help?</h3>
                 <p className="text-emerald-100 text-sm mb-4">Check our guide on how to create effective scholarship listings to attract more students.</p>
-                <Button variant="secondary" className="bg-white text-emerald-900 hover:bg-emerald-50 w-full border-none">
-                  View Guide
-                </Button>
+                <Link href="/university-dashboard/guide">
+                  <Button variant="secondary" className="bg-white text-emerald-900 hover:bg-emerald-50 w-full border-none">
+                    View Guide
+                  </Button>
+                </Link>
               </div>
               {/* Abstract shapes for decoration */}
               <div className="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 rounded-full bg-emerald-800 opacity-50 blur-2xl"></div>

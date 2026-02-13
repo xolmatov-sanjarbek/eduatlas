@@ -17,12 +17,17 @@ export const auth = betterAuth({
         type: "string",
         required: false,
         defaultValue: "STUDENT",
-        input: false, // set via setup-university or after signup
+        input: true, // allow setting during signup
       },
       universityId: {
         type: "string",
         required: false,
         input: false,
+      },
+      universityWebsite: {
+        type: "string",
+        required: false,
+        input: true,
       },
     },
   },
@@ -35,6 +40,9 @@ export const auth = betterAuth({
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }) => {
+      // Log verification URL to console for testing
+      console.log(`\n📧 VERIFICATION EMAIL [${user.email}]:\n🔗 URL: ${url}\n`);
+
       const html = await render(VerificationEmail({ url }));
       await resend.emails.send({
         from: "EduAtlas <onboarding@resend.dev>",

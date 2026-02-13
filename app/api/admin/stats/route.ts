@@ -29,12 +29,14 @@ export async function GET() {
         const [
             totalStudents,
             totalUniversities,
+            unverifiedUniversities,
             totalScholarships,
             newUsersLastWeek,
             scholarshipStats,
         ] = await Promise.all([
             prisma.user.count({ where: { userType: "STUDENT" } }),
             prisma.university.count(),
+            prisma.university.count({ where: { isVerified: false } }),
             prisma.scholarship.count(),
             prisma.user.count({
                 where: {
@@ -51,6 +53,7 @@ export async function GET() {
         return NextResponse.json({
             students: totalStudents,
             universities: totalUniversities,
+            unverifiedUniversities,
             scholarships: totalScholarships,
             newSignups: newUsersLastWeek,
             totalViews: scholarshipStats._sum.views || 0,

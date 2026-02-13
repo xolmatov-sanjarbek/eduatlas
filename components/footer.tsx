@@ -1,150 +1,145 @@
 "use client";
 
-import { GraduationCap, Twitter, Heart, Github, Mail, MapPin } from "lucide-react";
-import Link from "next/link";
+import {
+  GraduationCap,
+  Twitter,
+  Linkedin,
+  Instagram,
+  Github,
+  Heart,
+} from "lucide-react";
 
 export default function Footer() {
-  const footerLinks = {
-    students: [
+  const currentYear = new Date().getFullYear();
+
+  const links = {
+    product: [
       { name: "Search Scholarships", href: "/scholarships" },
       { name: "How It Works", href: "/#how-it-works" },
-      { name: "My Dashboard", href: "/dashboard" },
-      { name: "Success Stories", href: "/success-stories" },
-    ],
-    universities: [
-      { name: "List Scholarships", href: "/university-dashboard" },
-      { name: "Partner With Us", href: "/partners" },
-      { name: "Success Metrics", href: "/metrics" },
-      { name: "Resources", href: "/resources" },
+      { name: "Featured", href: "/scholarships" },
     ],
     company: [
-      { name: "About Us", href: "/about" },
-      { name: "Contact", href: "/contact" },
-      { name: "Privacy Policy", href: "/privacy" },
-      { name: "Terms of Service", href: "/terms" },
+      { name: "About", href: "/about" },
+      // { name: "Contact", href: "/contact" },
+      // { name: "Sponsors", href: "/sponsors" },
     ],
+    // legal: [
+    //   { name: "Privacy", href: "/privacy" },
+    //   { name: "Terms", href: "/terms" },
+    // ],
   };
 
   const socialLinks = [
-    { icon: Twitter, href: "https://x.com/xolmatov_sanjar", label: "Twitter" },
-    { icon: Github, href: "https://github.com/xolmatov-sanjarbek", label: "GitHub" },
+    { icon: Twitter, href: "#", label: "Twitter" },
+    { icon: Linkedin, href: "#", label: "LinkedIn" },
+    { icon: Instagram, href: "#", label: "Instagram" },
+    { icon: Github, href: "#", label: "GitHub" },
   ];
 
   return (
-    <footer className="bg-white border-t border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Main footer content */}
-        <div className="py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8">
-          {/* Brand column */}
-          <div className="lg:col-span-4 space-y-6">
-            <Link href="/" className="flex items-center gap-2 group">
-              <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/20 group-hover:shadow-emerald-500/30 transition-shadow duration-300">
-                <GraduationCap className="h-6 w-6 text-white" />
+    <footer className="bg-white border-t border-gray-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Main Footer Content */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-8">
+          {/* Brand */}
+          <div className="col-span-2">
+            <a href="/" className="flex items-center gap-2 mb-4 group">
+              <div className="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                <GraduationCap className="w-5 h-5 text-white" />
               </div>
-              <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-xl font-bold text-transparent">
-                EduAtlas
-              </span>
-            </Link>
-            <p className="text-gray-500 text-sm leading-relaxed max-w-sm">
-              EduAtlas connects students with life-changing scholarship opportunities worldwide.
-              We believe quality education should be accessible to everyone, everywhere.
+              <span className="text-xl font-bold text-gray-900">EduAtlas</span>
+            </a>
+            <p className="text-gray-600 text-sm max-w-xs leading-relaxed">
+              Making scholarship discovery simple and accessible for students
+              worldwide.
             </p>
+          </div>
 
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 text-sm text-gray-500">
-                <Mail className="w-4 h-4 text-emerald-500" />
-                <span>xolmatovsanjarbek@proton.me</span>
-              </div>
-              <div className="flex items-center gap-3 text-sm text-gray-500">
-                <MapPin className="w-4 h-4 text-emerald-500" />
-                <span>Tashkent, Uzbekistan</span>
-              </div>
-            </div>
-
-            {/* Social links */}
-            <div className="flex gap-3 pt-2">
-              {socialLinks.map((social) => {
-                const Icon = social.icon;
-                return (
+          {/* Product Links */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-3 text-sm">
+              Product
+            </h3>
+            <ul className="space-y-2">
+              {links.product.map((link) => (
+                <li key={link.name}>
                   <a
-                    key={social.label}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={social.label}
-                    className="w-10 h-10 bg-gray-50 hover:bg-emerald-50 rounded-xl flex items-center justify-center transition-all duration-300 group border border-gray-100 hover:border-emerald-100"
+                    href={link.href}
+                    className="text-gray-600 hover:text-emerald-600 text-sm transition-colors"
                   >
-                    <Icon className="w-4 h-4 text-gray-400 group-hover:text-emerald-600 transition-colors" />
+                    {link.name}
                   </a>
-                );
-              })}
-            </div>
+                </li>
+              ))}
+            </ul>
           </div>
 
-          {/* Links columns */}
-          <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-3 gap-8">
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-6">For Students</h4>
-              <ul className="space-y-3">
-                {footerLinks.students.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-gray-500 hover:text-emerald-600 transition-colors inline-block"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-6">For Universities</h4>
-              <ul className="space-y-3">
-                {footerLinks.universities.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-gray-500 hover:text-emerald-600 transition-colors inline-block"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-6">Company</h4>
-              <ul className="space-y-3">
-                {footerLinks.company.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-gray-500 hover:text-emerald-600 transition-colors inline-block"
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          {/* Company Links */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-3 text-sm">
+              Company
+            </h3>
+            <ul className="space-y-2">
+              {links.company.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    className="text-gray-600 hover:text-emerald-600 text-sm transition-colors"
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
+
+          {/* Legal Links */}
+          {/* <div>
+            <h3 className="font-semibold text-gray-900 mb-3 text-sm">Legal</h3>
+            <ul className="space-y-2">
+              {links.legal.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    className="text-gray-600 hover:text-emerald-600 text-sm transition-colors"
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div> */}
         </div>
 
-        {/* Bottom bar */}
-        <div className="py-8 border-t border-gray-100">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
-            <p className="text-gray-400">
-              © {new Date().getFullYear()} EduAtlas. All rights reserved.
-            </p>
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4">
+          {/* Copyright */}
+          <p className="text-gray-600 text-sm">
+            © {currentYear} EduAtlas. All rights reserved.
+          </p>
 
-            <div className="flex items-center gap-2 text-gray-400 bg-gray-50 px-4 py-2 rounded-full border border-gray-100">
-              <span>Made with</span>
-              <Heart className="w-4 h-4 text-red-500 fill-red-500 animate-pulse" />
-              <span>for students worldwide</span>
-            </div>
+          {/* Social Links */}
+          <div className="flex items-center gap-4">
+            {socialLinks.map((social) => {
+              const Icon = social.icon;
+              return (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  aria-label={social.label}
+                  className="w-9 h-9 rounded-lg bg-gray-100 hover:bg-emerald-100 flex items-center justify-center transition-all group"
+                >
+                  <Icon className="w-4 h-4 text-gray-600 group-hover:text-emerald-600 transition-colors" />
+                </a>
+              );
+            })}
+          </div>
+
+          {/* Made with love */}
+          <div className="flex items-center gap-1.5 text-sm text-gray-600">
+            <span>Made with</span>
+            <Heart className="w-4 h-4 text-red-500 fill-red-500" />
+            <span>for students</span>
           </div>
         </div>
       </div>

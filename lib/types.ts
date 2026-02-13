@@ -10,4 +10,5 @@ export type SessionUser = {
   emailVerified?: boolean;
   userType?: "STUDENT" | "UNIVERSITY";
   universityId?: string | null;
+  universityWebsite?: string | null;
 };

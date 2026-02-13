@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import ScholarshipGrid from "./scholarship-grid";
+import { normalizeScholarship } from "@/lib/normalize-scholarship";
 
 const List = async () => {
   let scholarships: Awaited<
@@ -7,7 +8,7 @@ const List = async () => {
   > = [];
   try {
     scholarships = await prisma.scholarship.findMany({
-      where: { isFeatured: true },
+      where: { isFeatured: true, removedAt: null },
       orderBy: { updatedAt: "desc" },
       take: 4,
     });
@@ -15,7 +16,8 @@ const List = async () => {
     console.warn("List: could not load featured scholarships", err);
   }
 
-  return <ScholarshipGrid scholarships={scholarships} />;
+  const normalized = scholarships.map(normalizeScholarship);
+  return <ScholarshipGrid scholarships={normalized} />;
 };
 
 export default List;
