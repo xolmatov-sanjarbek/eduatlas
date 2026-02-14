@@ -30,10 +30,8 @@ export default function Footer() {
   };
 
   const socialLinks = [
-    { icon: Twitter, href: "#", label: "Twitter" },
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
-    { icon: Instagram, href: "#", label: "Instagram" },
-    { icon: Github, href: "#", label: "GitHub" },
+    { icon: Twitter, href: "https://x.com/xolmatov_sanjar", label: "Twitter" },
+    { icon: Github, href: "https://github.com/xolmatov-sanjarbek", label: "GitHub" },
   ];
 
   return (
